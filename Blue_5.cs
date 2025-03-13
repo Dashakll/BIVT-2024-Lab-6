@@ -11,44 +11,31 @@ namespace Lab_6
     {
         public struct Sportsman
         {
-            public string _name;
-            public string _surname;
-            public int _place;
-            public bool _placeSet;
+            // поля
+            private string _name;
+            private string _surname;
+            private int _place;
 
-            public string Name { get { return _name; } }
-            public string Surname { get { return _surname; } }
-            public int Place
-            {
-                get
-                {
-                    if (_place == 0) { return 0; }
-                    return _place;
-                }
-            }
-            public bool PlaceSet => _placeSet;
+            // свойства
+            public string Name => _name;
+            public string Surname => _surname; 
+            public int Place => _place; 
 
+            // конструкторы
             public Sportsman(string name, string surname)
             {
                 _name = name;
                 _surname = surname;
                 _place = 0;
-                _placeSet = false;
-
             }
 
+            // методы
             public void SetPlace(int place)
             {
-                if (!_placeSet)
-                {
-                    if (place > 0)
-                    {
-                        _place = place;
-                        _placeSet = true;
-                    }
-                    else { return; }
-                }
+                if (_place != 0) return;
+                _place = place;
             }
+
             public void Print()
             {
                 Console.WriteLine($"{_name} {_surname} {_place}");
@@ -57,65 +44,84 @@ namespace Lab_6
 
         public struct Team
         {
+            // поля
             private string _name;
             private Sportsman[] _sportsmen;
-            private int _cnt;
+            private int _count;
 
-            public string Name { get { return _name; } }
-            public Sportsman[] Sportsmen => _sportsmen;
-
-
+            // свойства 
+            public string Name => _name;
+            public Sportsman[] Sportsmen
+            {
+                get
+                {
+                    if (_sportsmen.Length == 0 || _sportsmen == null) return null;
+                    Sportsman[] cp = new Sportsman[_sportsmen.Length];
+                    for (int i = 0; i < _sportsmen.Length; i++) { cp[i] = _sportsmen[i]; }
+                    return cp;
+                }
+            }
+            private int Count => _count;
             public int SummaryScore
             {
                 get
                 {
-                    if (_sportsmen.Length == 0 || _sportsmen == null) return 0;
-                    int scr = 0;
-                    foreach (Sportsman sportsman in _sportsmen)
+                    if (_sportsmen.Length == 0 => _sportsmen == null) return 0;
+                    int sm = 0;
+                    for (int i = 0; i < _sportsmen.Length; i++)
                     {
-                        switch (sportsman.Place)
+                        switch case (_sportsmen[i].Place)
                         {
-                            case 1: scr += 5; break;
-                            case 2: scr += 4; break;
-                            case 3: scr += 3; break;
-                            case 4: scr += 2; break;
-                            case 5: scr += 1; break;
+                            case 1: sm += 5; break;
+                            case 2: sm += 4; break;
+                            case 3: sm += 3; break;
+                            case 4: sm += 2; break;
+                            case 5: sm += 1; break;
                         }
                     }
-                    return scr;
+                    return sm;
                 }
             }
-
             public int TopPlace
             {
                 get
                 {
-                    if (Sportsmen.Length == 0 || _sportsmen == null) return 0;
-                    int tp = int.MaxValue;
-                    foreach (Sportsman sportsman in _sportsmen)
+                    if (_sportsmen.Length == 0 || _sportsmen == null) return 0;
+                    int maxP = 18;
+                    for (int i = 0; i < _sportsmen.Length; i++)
                     {
-                        if (sportsman.Place > 0 && sportsman.Place < tp) { tp = sportsman.Place; }
+                        if (_sportsmen[i].Place < maxP && _sportsmen[i].Place > 0) maxP = _sportsmen[i].Place;
                     }
-                    if (tp == int.MaxValue) return 0;
-                    return tp;
+                    return maxP;
                 }
             }
+
+            // конструкторы
             public Team(string name)
             {
                 _name = name;
                 _sportsmen = new Sportsman[6];
-                _cnt = 0;
+                _count = 0;
             }
 
+            // методы
             public void Add(Sportsman sportsman)
             {
-                if (_cnt < _sportsmen.Length) { _sportsmen[_cnt++] = sportsman; }
-                else return;
+                if (_sportsmen.Length == 0 || _count >= _sportsmen.Length || _sportsmen == null) return;
+                _sportsmen[_count] = sportsman;
+                _count++;
             }
 
-            public void Add(Sportsman[] newSportsmen)
+            public void Add(Sportsman[] sportsman)
             {
-                foreach (Sportsman sportsman in newSportsmen) { Add(sportsman); }
+                if (_sportsmen.Length == 0 || sportsman.Length == 0 || _count >= _sportsmen.Length || _sportsmen == null || sportsman == null) return;
+                int n = 0;
+                while (_count < _sportsmen.Length && n < sportsman.Length)
+                {
+                    _sportsmen[_count] = sportsman[n];
+                    _count++;
+                    n++;
+                }
             }
 
             public static void Sort(Team[] teams)
@@ -128,13 +134,11 @@ namespace Lab_6
                         i = j;
                         j++;
                     }
-
-                    else if (teams[i - 1].SummaryScore == teams[i].SummaryScore && teams[i - 1].TopPlace <= teams[i].TopPlace)
+                    else if (teams[i - 1].TopPlace <= teams[i].TopPlace && teams[i - 1].SummaryScore == teams[i].SummaryScore)
                     {
                         i = j;
                         j++;
                     }
-
                     else
                     {
                         Team t = teams[i];
@@ -144,12 +148,12 @@ namespace Lab_6
                     }
                 }
             }
-
             public void Print()
             {
-                Console.WriteLine(_name);
-                for (int i = 0; i < _cnt; i++) { _sportsmen[i].Print(); }
-                Console.WriteLine();
+                for (int i = 0; i < _sportsmen.Length; i++)
+                {
+                    Console.WriteLine($"{_name} {SummaryScore} {TopPlace}");
+                }
             }
         }
     }

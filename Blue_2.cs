@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,88 +10,97 @@ namespace Lab_6
 {
     public class Blue_2
     {
-        public struct Participant
+        public class Blue_2
         {
-            // поля
-            private string _name;
-            private string _surname;
-            private int _ind;
-            private int[,] _marks;
+            public struct Participant
+            {
+                // поля
+                private string _name;
+                private string _surname;
+                private int[,] _marks;
 
-            // свойства
-            public string Name
-            {
-                get
+                // свойства
+                public string Name => _name;
+                public string Surname => _surname;
+                public int[,] Marks
                 {
-                    if (_name == null) return null;
-                    return _name;
+                    get
+                    {
+                        if (_marks == null) return null;
+                        int[,] cpmarks = new int[2, 5];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            for(int j = 0; j < 5; j++)
+                            {
+                                cpmarks[i, j] = _marks[i, j];
+                            }
+                        }
+                        return cpmarks;
+                    }
                 }
-            }
-            public string Surname
-            {
-                get
+                public int TotalScore
                 {
-                    if (_surname == null) return null;
-                    return _surname;
+                    get
+                    {
+                        int n = 0;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            for (int j = 0; j < 5; j++) { n += _marks[i, j]; }
+                        }
+                        return n;
+                    }
                 }
-            }
-            public int[,] Marks
-            {
-                get
+
+                // структуры
+
+                public Participant(string name, string surname)
                 {
-                    if (_marks == null) 
-                        return default(int[,]);
-                    int[,] Markss = new int[2, 5];
+                    _name = name;
+                    _surname = surname;
+                    _marks = new int[2,5];
+                }
+                // методы
+
+                public void Jump(int[] result)
+                {
+                    if (_marks == null || result == null) return;
                     for (int i = 0; i < 2; i++)
                     {
-                        for (int j = 0; j < 5; j++) { Markss[i, j] = _marks[i, j]; }
+                        if (_marks[i, 0] == 0)
+                        {
+                            for (int j = 0; j < 5; j++) { _marks[i, j] = result[j]; }
+                            return;
+                        }
                     }
-                    return Markss;
                 }
-            }
-            public int TotalScore
-            {
-                get
+
+                public static void Sort(Participant[] array)
                 {
-                    if (_marks == null) { return 0; }
-                    int total_score = 0;
-                    for (int i = 0; i < 2; i++)
+                    if (array.Length == 0 || array == null) return;
+                    for (int i = 0; i < array.Length; i++)
                     {
-                        for (int j = 0; j < 5; j++) { total_score += _marks[i, j]; }
+                        for (int j = 0; j < array.Length - i - 1; j++)
+                        {
+                            if (array[j].TotalScore < array[j + 1].TotalScore)
+                            {
+                                Participant t = array[j];
+                                array[j] = array[j + 1];
+                                array[j + 1] = t;
+                            }
+                        }
                     }
-                    return total_score;
                 }
-            }
-            // Конструкторы
-            public Participant(string name, string surname)
-            {
-                _name = name;
-                _surname = surname;
-                _marks = new int[2, 5];
-                _ind = 0;
-            }
-            // методы
-            public void Jump(int[] result)
-            {
-                if (_marks == null || _marks.GetLength(0) == 0 || _marks.GetLength(1) == 0 || result == null || result.Length == 0 || _ind > 1) 
-                    return;
-                for (int i = 0; i < result.Length; i++) { _marks[_ind, i] = result[i]; }
-                _ind++;
-            }
-            public static void Sort(Participant[] array)
-            {
-                if (array == null || array.Length == 0) return;
-                for (int i = 0; i < array.Length; i++)
+
+                public void Print()
                 {
-                    for (int j = 0; j < array.Length - i - 1; j++)
+                    Console.WriteLine(_name + " " + _surname);
+                    for (int i = 0; i < _marks.GetLength(0); i++)
                     {
-                        if (array[j].TotalScore < array[j + 1].TotalScore) { (array[j], array[j + 1]) = (array[j + 1], array[j]); } 
+                        for (int j = 0; j < _marks.GetLength(1); j++) { Console.WriteLine(_marks[i, j]); }
+                        Console.WriteLine();
                     }
+                    Console.WriteLine(TotalScore);
                 }
-            }
-            public void Print(Participant participant)
-            {
-                Console.WriteLine($"{participant.Name}\t{participant.Surname}\t\t{participant.TotalScore}");
             }
         }
     }

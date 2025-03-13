@@ -11,85 +11,90 @@ namespace Lab_6
     {
         public struct Participant
         {
-            // поля
             private string _name;
             private string _surname;
             private int[] _penaltyTimes;
-            private int _pldmtchsnm;
-
-            // свойства
-            public string Name { get { return _name; } }
-            public string Surname { get { return _surname; } }
+            public string Name => _name;
+            public string Surname => _surname;
             public int[] PenaltyTimes
             {
                 get
                 {
-                    int[] c = new int[_penaltyTimes.Length];
-                    for (int k = 0; k < c.Length; k++)
-                        c[k] = _penaltyTimes[k];
-                    return c;
+                    if (_penaltyTimes == null) return null;
+                    int[] copy = new int[_penaltyTimes.Length];
+                    Array.Copy(_penaltyTimes, copy, _penaltyTimes.Length);
+                    return copy;
                 }
             }
             public int TotalTime
             {
                 get
+
                 {
-                    int totalTime = 0;
-                    for (int i = 0; i < _penaltyTimes.Length; i++) { totalTime += _penaltyTimes[i]; }
-                    return totalTime;
+                    if (_penaltyTimes == null) return 0;
+                    else { return _penaltyTimes.Sum(); }
                 }
             }
+
             public bool IsExpelled
             {
                 get
                 {
+                    if (_penaltyTimes == null || _penaltyTimes.Length == 0) return false;
                     for (int i = 0; i < _penaltyTimes.Length; i++)
                     {
-                        if (_penaltyTimes[i] == 10) { return true; }
+                        if (_penaltyTimes[i] == 10) return true;
                     }
                     return false;
                 }
             }
-
-            // конструкторы
             public Participant(string name, string surname)
             {
                 _name = name;
                 _surname = surname;
-                _penaltyTimes = new int[10];
-                _pldmtchsnm = 0;
+                _penaltyTimes = new int[0];
+
             }
 
-            // методы
             public void PlayMatch(int time)
             {
-                if (_pldmtchsnm >= _penaltyTimes.Length) return;
-                _penaltyTimes[_pldmtchsnm] = time;
-                _pldmtchsnm++;
+                if (_penaltyTimes == null) return;
+                if (_penaltyTimes.Length == 0)
+                {
+                    int[] pT = new int[1];
+                    pT[0] = time;
+                    _penaltyTimes = new int[1];
+                    Array.Copy(pT, _penaltyTimes, pT.Length);
+                }
+                else
+                {
+                    int[] pT = new int[_penaltyTimes.Length + 1];
+                    pT[pT.Length - 1] = time;
+                    for (int i = 0; i < _penaltyTimes.Length; i++) { pT[i] = _penaltyTimes[i]; }
+                    _penaltyTimes = new int[_pT.Length];
+                    Array.Copy(pT, _penaltyTimes, pT.Length);
+                }
             }
+
             public static void Sort(Participant[] array)
             {
-                if (array == null || array.Length == 0) return;
-
-                for (int i = 0; i < array.Length - 1; i++)
+                if (array.Length == 0 || array == null) return;
+                for (int i = 0; i < array.Length; i++)
                 {
                     for (int j = 0; j < array.Length - i - 1; j++)
                     {
-                        if (array[j + 1].TotalTime < array[j].TotalTime)
-                        {
-                            Participant t = array[j + 1];
-                            array[j + 1] = array[j];
-                            array[j] = t;
+                        if (array[j].TotalTime > array[j + 1].TotalTime) 
+                        { 
+                            (array[j], array[j + 1]) = (array[j + 1], array[j]); 
                         }
                     }
                 }
             }
+
             public void Print()
             {
-                Console.WriteLine($"{_name} {_surname}");
-                for (int i = 0; i < _penaltyTimes.Length; i++) { Console.Write($"{_penaltyTimes[i],4}"); }
+                Console.Write($"{_name}, {_surname}, {TotalTime}, {IsExpelled}");
                 Console.WriteLine();
-                Console.WriteLine($"{TotalTime}");
             }
         }
     }

@@ -9,165 +9,130 @@ namespace Lab_6
 {
     public class Blue_4
     {
-        public struct Team
+        public struct Team 
         {
+            // поля
             private string _name;
             private int[] _scores;
 
             // свойства
-            public string Name { get { return _name; } }
-            public int[] Scores
-            {
-                get
-                {
-                    if (_scores.Length == 0 || _scores == null) return null;
-                    int[] c = new int[_scores.Length];
-                    for (int i = 0; i < c.Length; i++) { c[i] = _scores[i]; }
-                    return c;
-                }
-            }
+            public string Name => _name;
+            public int[] Scores => _scores;
             public int TotalScore
             {
                 get
                 {
-                    if (_scores == null || _scores.Length == 0) return 0;
-                    int cnt = 0;
-                    for (int i = 0; i < _scores.Length; i++) { cnt += _scores[i]; }
-                    return cnt;
+                    if (_scores == null) return 0;
+                    return _scores.Sum();
                 }
             }
+
             // конструкторы
             public Team(string name)
             {
                 _name = name;
-                _scores = null;
+                _scores = new int[0];
             }
-            // методы
+
+            // методы 
             public void PlayMatch(int result)
             {
-                if (_scores == null)
-                {
-                    int[] _s = new int[1];
-                    _s[0] = result;
-                    _scores = _s;
-                }
-
-                else
-                {
-                    int[] s = new int[_scores.Length + 1];
-                    s[s.Length - 1] = result;
-                    for (int i = 0; i < _scores.Length; i++) { s[i] = _scores[i]; }
-                    _scores = s;
-                }
+                if (_scores == null) return;
+                int[] pl = new int[_scores.Length + 1];
+                for (int i = 0; i < _scores.Length; i++) { pl[i] = _scores[i]; }
+                pl[pl.Length - 1] = result;
+                _scores = pl;
             }
+
             public void Print()
             {
-                Console.WriteLine($"{this._name} {this.TotalScore}");
+                Console.WriteLine($"{_name}: {TotalScore}");
             }
         }
+
         public struct Group
         {
             // поля
             private string _name;
             private Team[] _teams;
-            private int _cnt;
+            private int _index;
 
             // свойства
-            public string Name { get { return _name; } }
-            public Team[] Teams
-            {
-                get
-                {
-                    if (_teams.Length == 0 || _teams == null) return null;
-                    Team[] c = new Team[_teams.Length];
-                    for (int i = 0; i < c.Length; i++) { c[i] = _teams[i]; }
-                    return c;
-                }
-            }
-            public int Cnt { get { return _cnt; } }
+            public string Name => _name;
+            public Team[] Teams => _teams;
 
             // конструкторы
             public Group(string name)
             {
                 _name = name;
                 _teams = new Team[12];
-                _cnt = 0;
+                _index = 0;
             }
+
             // методы
             public void Add(Team team)
             {
-                if (_teams.Length == 0 || _teams == null || _cnt >= _teams.Length) return;
-                _teams[_cnt] = team;
-                _cnt++;
-            }
-            public void Add(Team[] teams)
-            {
-                if (_teams.Length == 0 || teams.Length == 0 || _teams  == null || teams == null || _cnt >= _teams.Length) return;
-                int i = 0;
-                while (_cnt < _teams.Length && i < teams.Length)
+                if (_teams == null) return;
+                if (_index < _teams.Length)
                 {
-                    _teams[_cnt] = teams[i];
-                    i++;
-                    _cnt++;
+                    _teams[_index] = team;
+                    _index++;
                 }
             }
+
+            public void Add(Team[] teams)
+            {
+                if (teams.Length == 0 || _teams == null || teams == null) return;
+                foreach (var team in teams) { Add(team); }
+            }
+
             public void Sort()
             {
                 if (_teams.Length == 0 || _teams == null) return;
-                for (int i = 1, j = 2; i < _teams.Length;)
+                for (int i = 0; i < _teams.Length; i++)
                 {
-                    if (i == 0 || (_teams[i - 1].TotalScore >= _teams[i].TotalScore))
+                    for (int j = 0; j < _teams.Length - i - 1; j++)
                     {
-                        i = j;
-                        j++;
-                    }
-
-                    else
-                    {
-                        Team tmp = _teams[i];
-                        _teams[i] = _teams[i - 1];
-                        _teams[i - 1] = tmp;
-                        i--;
+                        if (_teams[j].TotalScore < _teams[j + 1].TotalScore) { (_teams[j], _teams[j + 1]) = (_teams[j + 1], _teams[j]); }
                     }
                 }
             }
+
             public static Group Merge(Group group1, Group group2, int size)
             {
-                Group result = new Group("Финалисты");
-                int s = size / 2, i = 0, j = 0;
-                while (i < s && j < s)
+                Group res = new Group("Финалисты");
+                int i = 0, g = 0, t = 0, j = 0;
+                while (j < size && i < size)
                 {
                     if (group1.Teams[i].TotalScore >= group2.Teams[j].TotalScore)
                     {
-                        result.Add(group1.Teams[i]);
+                        res.Add(group1.Teams[i]);
                         i++;
                     }
-
                     else
                     {
-                        result.Add(group2.Teams[j]);
+                        res.Add(group2.Teams[j]);
                         j++;
                     }
                 }
-
-                while (i < s)
+                while (g < size)
                 {
-                    result.Add(group1.Teams[i]);
-                    i++;
+                    res.Add(group1.Teams[g]);
+                    g++;
                 }
-
-                while (j < s)
+                while (t < size)
                 {
-                    result.Add(group2.Teams[i]);
-                    j++;
+                    res.Add(group2.Teams[t]);
+                    t++;
                 }
-
-                return result;
+                return res;
             }
+
             public void Print()
             {
                 Console.WriteLine(_name);
-                for (int i = 0; i < _cnt; i++) { _teams[i].Print(); }
+                foreach (Team p in _teams) { p.Print(); }
+                Console.WriteLine();
             }
         }
     }
