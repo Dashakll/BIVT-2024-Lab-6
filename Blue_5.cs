@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Lab_6
 {
-    public class Blue_5
+    class Blue_5
     {
         public struct Sportsman
         {
@@ -18,8 +17,8 @@ namespace Lab_6
 
             // свойства
             public string Name => _name;
-            public string Surname => _surname; 
-            public int Place => _place; 
+            public string Surname => _surname;
+            public int Place => _place;
 
             // конструкторы
             public Sportsman(string name, string surname)
@@ -66,11 +65,11 @@ namespace Lab_6
             {
                 get
                 {
-                    if (_sportsmen.Length == 0 => _sportsmen == null) return 0;
+                    if (_sportsmen == null || _sportsmen.Length == 0) return 0;
                     int sm = 0;
                     for (int i = 0; i < _sportsmen.Length; i++)
                     {
-                        switch case (_sportsmen[i].Place)
+                        switch (_sportsmen[i].Place)
                         {
                             case 1: sm += 5; break;
                             case 2: sm += 4; break;

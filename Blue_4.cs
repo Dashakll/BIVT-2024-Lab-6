@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Lab_6
 {
-    public class Blue_4
+    class Blue_4
     {
-        public struct Team 
+        public struct Team
         {
             // поля
             private string _name;

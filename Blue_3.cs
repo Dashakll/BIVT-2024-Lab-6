@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Lab_6
 {
-    public class Blue_3
+    class Blue_3
     {
         public struct Participant
         {
@@ -71,7 +70,7 @@ namespace Lab_6
                     int[] pT = new int[_penaltyTimes.Length + 1];
                     pT[pT.Length - 1] = time;
                     for (int i = 0; i < _penaltyTimes.Length; i++) { pT[i] = _penaltyTimes[i]; }
-                    _penaltyTimes = new int[_pT.Length];
+                    _penaltyTimes = new int[_penaltyTimes.Length];
                     Array.Copy(pT, _penaltyTimes, pT.Length);
                 }
             }
@@ -83,9 +82,9 @@ namespace Lab_6
                 {
                     for (int j = 0; j < array.Length - i - 1; j++)
                     {
-                        if (array[j].TotalTime > array[j + 1].TotalTime) 
-                        { 
-                            (array[j], array[j + 1]) = (array[j + 1], array[j]); 
+                        if (array[j].TotalTime > array[j + 1].TotalTime)
+                        {
+                            (array[j], array[j + 1]) = (array[j + 1], array[j]);
                         }
                     }
                 }
