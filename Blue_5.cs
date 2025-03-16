@@ -46,14 +46,7 @@ namespace Lab_6
             private int _counter;
 
             public string Name => _name;
-            public Sportsman[] Sportsmen
-            {
-                get
-                {
-                    if (_sportsmen == null) return null;
-                    return _sportsmen;
-                }
-            }
+            public Sportsman[] Sportsmen => _sportsmen;
             public int SummaryScore
             {
                 get

@@ -20,7 +20,7 @@ namespace Lab_6
             {
                 get
                 {
-                    if (_pT.Length == 0 || _pT == null) return null;
+                    if (_pT == null || _pT.Length == 0) return null;
                     int[] cp = new int[_pT.Length];
                     for (int i = 0; i < cp.Length; i++) { cp[i] = _pT[i]; }
                     return cp;
@@ -31,7 +31,7 @@ namespace Lab_6
             {
                 get
                 {
-                    if (_pT.Length == 0 || _pT == null) return 0;
+                    if (_pT == null || _pT.Length == 0) return 0;
                     int counter = 0;
                     for (int i = 0; i < _pT.Length; i++) { counter += _pT[i]; }
                     return counter;
@@ -44,7 +44,7 @@ namespace Lab_6
                 get
                 {
                     bool b = true;
-                    if (_pT.Length == 0 || _pT == null) return true;
+                    if (_pT == null || _pT.Length == 0) return true;
                     for (int i = 0; i < _pT.Length; i++)
                     {
                         if (_pT[i] == 10)
@@ -77,7 +77,7 @@ namespace Lab_6
 
             public static void Sort(Participant[] array)
             {
-                if (array.Length == 0 || array == null) return;
+                if (array == null || array.Length == 0) return;
                 for (int i = 0; i < array.Length; i++)
                 {
                     for (int j = 0; j < array.Length - i - 1; j++)

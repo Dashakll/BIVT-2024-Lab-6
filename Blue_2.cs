@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,9 +56,17 @@ namespace Lab_6
 
             public void Jump(int[] result)
             {
-                if (_marks == null || result == null) return;
-                for (int j = 0; j < 5; j++) { _marks[_counter, j] = result[j]; }
-                _counter++;
+                if (_marks == null || _marks.GetLength(1) == 0 || _marks.GetLength(0) == 0 || result == null || result.Length == 0 || _counter > 1) return;
+                if (_counter == 0)
+                {
+                    for (int i = 0; i < 5; i++) { _marks[0, i] = result[i]; }
+                    _counter++;
+                }
+                else if (_counter == 1)
+                {
+                    for (int i = 0; i < 5; i++) { _marks[1, i] = result[i]; }
+                    _counter++;
+                }
             }
 
             public static void Sort(Participant[] array)
