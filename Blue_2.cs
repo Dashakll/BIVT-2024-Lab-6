@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace Lab_6
 {
-    class Blue_2
+    public class Blue_2
     {
         public struct Participant
         {
-            // поля
             private string _name;
             private string _surname;
             private int[,] _marks;
+            private int _counter;
 
-            // свойства
             public string Name => _name;
             public string Surname => _surname;
             public int[,] Marks
@@ -23,80 +22,71 @@ namespace Lab_6
                 get
                 {
                     if (_marks == null) return null;
-                    int[,] cpmarks = new int[2, 5];
-                    for (int i = 0; i < 2; i++)
+                    int[,] new_array = new int[2, 5];
+                    for (int i = 0; i < new_array.GetLength(0); i++)
                     {
-                        for (int j = 0; j < 5; j++)
-                        {
-                            cpmarks[i, j] = _marks[i, j];
-                        }
+                        for (int j = 0; j < new_array.GetLength(1); j++) { new_array[i, j] = _marks[i, j]; }
                     }
-                    return cpmarks;
+                    return new_array;
                 }
             }
+
             public int TotalScore
             {
                 get
                 {
-                    int n = 0;
-                    for (int i = 0; i < 2; i++)
+                    if (_marks == null) return 0;
+                    int scr = 0;
+                    for (int i = 0; i < _marks.GetLength(0); i++)
                     {
-                        for (int j = 0; j < 5; j++) { n += _marks[i, j]; }
+                        for (int j = 0; j < _marks.GetLength(1); j++) { scr += _marks[i, j]; }
                     }
-                    return n;
+                    return scr;
                 }
             }
 
-            // структуры
-
-            public Participant(string name, string surname)
+            public Participant(string Name, string Surname)
             {
-                _name = name;
-                _surname = surname;
+                _name = Name;
+                _surname = Surname;
                 _marks = new int[2, 5];
+                _counter = 0;
             }
-            // методы
 
             public void Jump(int[] result)
             {
                 if (_marks == null || result == null) return;
-                for (int i = 0; i < 2; i++)
-                {
-                    if (_marks[i, 0] == 0)
-                    {
-                        for (int j = 0; j < 5; j++) { _marks[i, j] = result[j]; }
-                        return;
-                    }
-                }
+                for (int j = 0; j < 5; j++) { _marks[_counter, j] = result[j]; }
+                _counter++;
             }
 
             public static void Sort(Participant[] array)
             {
-                if (array.Length == 0 || array == null) return;
-                for (int i = 0; i < array.Length; i++)
+                if (array == null) return;
+                for (int i = 1, j = 2; i < array.Length;)
                 {
-                    for (int j = 0; j < array.Length - i - 1; j++)
+                    if (array[i].TotalScore <= array[i - 1].TotalScore || i == 0)
                     {
-                        if (array[j].TotalScore < array[j + 1].TotalScore)
-                        {
-                            Participant t = array[j];
-                            array[j] = array[j + 1];
-                            array[j + 1] = t;
-                        }
+                        i = j;
+                        j++;
+                    }
+                    else
+                    {
+                        Participant arr = array[i];
+                        array[i] = array[i - 1];
+                        array[i - 1] = arr;
+                        i--;
                     }
                 }
             }
 
             public void Print()
             {
-                Console.WriteLine(_name + " " + _surname);
-                for (int i = 0; i < _marks.GetLength(0); i++)
-                {
-                    for (int j = 0; j < _marks.GetLength(1); j++) { Console.WriteLine(_marks[i, j]); }
-                    Console.WriteLine();
-                }
-                Console.WriteLine(TotalScore);
+                Console.WriteLine($"{_name} {_surname} {TotalScore}");
+                Console.WriteLine();
             }
+
+
         }
     }
 }
