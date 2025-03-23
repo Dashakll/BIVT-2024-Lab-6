@@ -31,7 +31,7 @@ namespace Lab_6
             {
                 get
                 {
-                    if (_pT == null || _pT.Length == 0) return 0;
+                    if (_pT == null) return 0;
                     int counter = 0;
                     for (int i = 0; i < _pT.Length; i++) { counter += _pT[i]; }
                     return counter;

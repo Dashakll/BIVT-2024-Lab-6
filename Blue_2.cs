@@ -71,20 +71,12 @@ namespace Lab_6
 
             public static void Sort(Participant[] array)
             {
-                if (array == null) return;
-                for (int i = 1, j = 2; i < array.Length;)
+                if (array == null || array.Length == 0) return;
+                for (int i = 0; i < array.Length; i++)
                 {
-                    if (array[i].TotalScore <= array[i - 1].TotalScore || i == 0)
+                    for (int j = 0; j < array.Length - i - 1; j++)
                     {
-                        i = j;
-                        j++;
-                    }
-                    else
-                    {
-                        Participant arr = array[i];
-                        array[i] = array[i - 1];
-                        array[i - 1] = arr;
-                        i--;
+                        if (array[j + 1].TotalScore > array[j].TotalScore) { (array[j], array[j + 1]) = (array[j + 1], array[j]); }
                     }
                 }
             }
