@@ -44,7 +44,7 @@ namespace Lab_6
                 get
                 {
                     bool b = true;
-                    if (_pT == null || _pT.Length == 0) return true;
+                    if (_pT == null) return true;
                     for (int i = 0; i < _pT.Length; i++)
                     {
                         if (_pT[i] == 10)
