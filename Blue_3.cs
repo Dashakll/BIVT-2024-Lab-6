@@ -20,7 +20,7 @@ namespace Lab_6
             {
                 get
                 {
-                    if (_pT == null || _pT.Length == 0) return null;
+                    if (_pT == null) return null;
                     int[] cp = new int[_pT.Length];
                     for (int i = 0; i < cp.Length; i++) { cp[i] = _pT[i]; }
                     return cp;
